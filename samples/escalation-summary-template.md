@@ -22,10 +22,10 @@ Open / Monitoring / Remediated / Awaiting validation
 |---|---|
 | HH:MM | Ticket opened |
 | HH:MM | Initial validation performed |
-| HH:MM | Logs/configuration reviewed |
-| HH:MM | Probable cause identified |
+| HH:MM | Backup and tape records reviewed |
+| HH:MM | Server/media coordination issue identified |
 | HH:MM | Remediation applied |
-| HH:MM | Validation completed |
+| HH:MM | Backup and restore validation completed |
 
 ---
 
@@ -35,20 +35,21 @@ Summarize the customer-reported symptom in plain language.
 
 Example:
 
-A restore was requested for data from a Unix-based system. The expected restore point was not available or did not recover the requested data.
+A restore was requested for data from a Unix/Solaris-based system. The expected restore point was not available or did not recover the requested data.
 
 ---
 
 ## What Was Checked
 
 - Backup job history
-- Backup client configuration
-- Policy/domain assignment
-- Include/exclude behavior
-- Retention settings
-- Restore command syntax
+- TSM server roles
+- Tape library activity
+- Media ownership records
+- Server-to-library communication pattern
+- Retention expectations
 - Available restore points
-- System path and file selection behavior
+- Restore command syntax
+- Backup and restore validation results
 
 ---
 
@@ -58,7 +59,7 @@ Summarize what was discovered.
 
 Example:
 
-The backup process appeared to complete, but the available restore data did not match recovery expectations. Configuration review showed that backup coverage, retention, and restore validation had not been documented clearly enough to confirm recoverability before the incident.
+The backup process appeared to complete, but the available restore data did not match recovery expectations. Review showed that multiple TSM servers were writing to the same IBM tape library without reliable shared media coordination, creating conditions where one server could overwrite media written by another server.
 
 ---
 
@@ -68,18 +69,20 @@ State the most likely cause based on evidence.
 
 Example:
 
-Backup configuration and validation gaps caused a mismatch between assumed backup coverage and actual recoverability.
+The probable root cause was server-side backup infrastructure design. Multiple TSM servers had simultaneous access to the tape library without a reliable controlling/logging layer for media ownership and access coordination.
 
 ---
 
 ## Remediation Performed
 
-- Reviewed client and policy configuration.
-- Corrected backup scope and file selection behavior.
-- Rebuilt configuration according to documented operational requirements.
-- Ran validation backup.
-- Performed test restore.
-- Documented repeatable restore procedure.
+- Reviewed the TSM server and tape library architecture.
+- Identified the media overwrite risk caused by uncoordinated server access.
+- Rebuilt the backup infrastructure around a controlled media-access model.
+- Preserved distributed backup collection from source systems.
+- Added a controlling/logging server role for media access coordination.
+- Ran validation backups.
+- Performed test restores.
+- Documented the corrected architecture and restore process.
 
 ---
 
@@ -89,21 +92,21 @@ Describe how the fix was proven.
 
 Example:
 
-A test backup completed successfully after configuration changes, and a test restore confirmed that the expected data could be recovered.
+Backup jobs completed successfully after the redesign, media access was coordinated through the defined control/logging point, and test restores confirmed that expected data could be recovered.
 
 ---
 
 ## Remaining Risks
 
-- Older restore points may still reflect prior configuration gaps.
+- Older media may still reflect prior coordination gaps.
 - Continued periodic restore testing is recommended.
-- Documentation should be reviewed after future policy or client changes.
+- Documentation should be reviewed after future server, tape library, or media pool changes.
 
 ---
 
 ## Recommended Follow-Up
 
 - Schedule recurring restore validation.
-- Review backup policy assignments.
-- Maintain backup and restore runbook.
+- Review backup server roles and media ownership periodically.
+- Maintain the backup and restore runbook.
 - Confirm ownership for future configuration changes.
