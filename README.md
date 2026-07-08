@@ -24,6 +24,8 @@ These examples demonstrate how I approach technical support work:
 | `samples/escalation-summary-template.md` | Example escalation summary format for engineering or senior support handoff |
 | `samples/customer-facing-technical-update.md` | Example customer-facing update written in plain technical language |
 | `samples/post-remediation-runbook.md` | Example runbook created after remediation to prevent repeat incidents |
+| `samples/national-support-desk-standup-case-study.md` | Case-study example of standing up a 12-person program support desk from scratch under a federal compliance deadline |
+| `samples/hl7-interface-escalation-summary.md` | Escalation summary example for an intermittent clinical interface delivery issue during a hospital go-live |
 
 ## Notes
 
