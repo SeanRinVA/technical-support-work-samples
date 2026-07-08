@@ -86,8 +86,3 @@ The technical finding ("this field failed validation") is not the same as guidan
 
 Managing 51 agencies against one deadline meant actively rebalancing reviewer workload toward risk, not just processing tickets in the order they arrived.
 
----
-
-## Example Interview Summary
-
-I was asked to stand up a technical support desk from scratch to get all 51 state departments of education through a federal compliance file submission process before a hard deadline, with no existing intake, review, or escalation process in place. I built the review standard first, then designed the intake, failure-review, and resubmission workflow around it, and built and managed a 12-person desk to run it — including hardware procurement and deployment. The biggest lesson from running it was that vague rejection notices caused repeat failures; once reviewers gave state staff specific, actionable correction guidance on the first pass, most agencies didn't fail a second time. All 51 agencies reached a passing submission before the compliance window closed.

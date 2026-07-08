@@ -26,6 +26,8 @@ These examples demonstrate how I approach technical support work:
 | `samples/post-remediation-runbook.md` | Example runbook created after remediation to prevent repeat incidents |
 | `samples/national-support-desk-standup-case-study.md` | Case-study example of standing up a 12-person program support desk from scratch under a federal compliance deadline |
 | `samples/hl7-interface-escalation-summary.md` | Escalation summary example for an intermittent clinical interface delivery issue during a hospital go-live |
+| `samples/storage-and-ha-design-case-study.md` | Case-study example of storage isolation and high-availability design for a standardized multi-tier clinical deployment |
+| `samples/implementation-lifecycle-case-study.md` | Case-study example of owning a multi-site clinical software implementation end to end, from kickoff through go-live and turnover |
 
 ## Notes
 
