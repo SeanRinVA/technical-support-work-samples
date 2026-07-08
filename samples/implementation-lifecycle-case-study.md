@@ -1,8 +1,8 @@
-# Case Study: Owning a Multi-Site Clinical Software Implementation End to End
+# Case Study: Owning the Technical Implementation of a Multi-Site Clinical Software Deployment
 
 ## Scenario
 
-A clinical software vendor sold a standardized product deployment to hospitals: a database tier, an application tier, a communications/interface tier, and a set of clinical workstations, installed and brought live inside a customer-owned hospital environment. My role was the technical implementation lead for these deployments — the person who owned the project from the point sales handed it off through go-live and turnover to support.
+A clinical software vendor sold a standardized product deployment to hospitals: a database tier, an application tier, a communications/interface tier, and a set of clinical workstations, installed and brought live inside a customer-owned hospital environment. My role was technical implementation lead for these deployments — responsible for the technical delivery from the point sales handed it off through go-live and turnover to support. A project manager owned the overall project (scope, schedule, contract modifications); my ownership was the technical build and its execution across every phase, working alongside that PM rather than in that role.
 
 Every site had the same basic phase structure, whether the customer was a commercial hospital, a VA medical center, or a DoD military treatment facility, with adjustments for each environment's specific requirements. This sample describes that phase structure and the coordination work it required — it is sanitized and generalized, and does not name a facility, vendor, product, or individual.
 
@@ -43,7 +43,7 @@ This phase ran on the customer's timeline, not the vendor team's, which meant tr
 
 ## Phase 3: Server Build
 
-Once prerequisites were confirmed, I went onsite to build the environment using a scripted deployment package, driven by a prerequisite worksheet that captured site-specific variables the scripts needed as input. When a script step failed, I diagnosed the failure, adjusted the script if the issue was site-specific, and resumed from the failed stage rather than restarting the whole build.
+Once prerequisites were confirmed, I went onsite to build the environment using a PowerShell-based deployment script package, driven by a prerequisite worksheet that captured site-specific variables the scripts needed as input. When a script step failed, I diagnosed the failure, adjusted the script if the issue was site-specific, and resumed from the failed stage rather than restarting the whole build.
 
 The build reached a domain-join checkpoint, at which point the customer's local IT/biomed staff performed the domain join (a boundary I did not cross into their directory services). After that, I completed the post-domain-join configuration, handled any steps that couldn't be scripted, and coordinated with the hospital's interface contacts to test message connectivity before considering the server build complete.
 
@@ -61,11 +61,11 @@ Configuration issues found during that clinical training work were cleaned up re
 
 ## Phase 5: Workstation Imaging and Deployment
 
-On a later onsite trip, I built and validated an initial clinical workstation image — confirming connectivity to both the server environment and any patient-connected devices — then used that same workstation for that trip's test-in-test pass before re-imaging it and pointing it to Production to remove any test artifacts.
+On a separate, later onsite trip, I built and validated an initial clinical workstation image — confirming connectivity to both the server environment and any patient-connected devices — then used that same workstation for that trip's test-in-test pass before re-imaging it and pointing it to Production to remove any test artifacts.
 
-Additional workstation images were prepared and held, pointed to Production, awaiting final deployment. This created a real scheduling constraint: machines that sat too long after imaging risked falling off the domain as their computer-account records aged out, so image and deployment timing had to be planned against that window rather than treated as independently schedulable steps.
+Additional workstations, already onsite, were imaged from that validated image and held in onsite storage rather than finished and placed immediately. That gap created a real timing constraint: each workstation still had pre-domain-join preparation to complete, followed by the domain join itself and a post-domain-join PowerShell-scripted build-out (with only a handful of manual steps left after that). If a workstation sat in storage too long between imaging and that final build-out, the pre-domain-join preparation could go stale and need to be redone before the workstation could finish its build and join the domain — so imaging and deployment timing had to be planned together, not treated as independently schedulable steps.
 
-Deployment itself — finalizing installation and validating connectivity on every remaining workstation — typically happened after hours, since these machines were going into active clinical spaces. For new installations (as opposed to upgrades of an existing system), the facility ran a period of parallel documentation on the old and new systems before cutover.
+Deployment itself meant moving each workstation out of onsite storage into the clinical area where it would actually be used, then completing the pre-domain-join tasks, joining the domain, running the post-domain-join PowerShell-scripted build-out, and validating connectivity. This typically happened after hours, since these machines were going into active clinical spaces. For new installations (as opposed to upgrades of an existing system), the facility ran a period of parallel documentation on the old (typically paper) and new systems before cutover.
 
 ---
 
@@ -73,7 +73,7 @@ Deployment itself — finalizing installation and validating connectivity on eve
 
 The final onsite trip performed a full checkout of every workstation — a more rigorous pass than the connectivity checks done earlier — to certify each one ready for first patient use. The following day was the first day of live clinical use.
 
-I stayed onsite through that first day specifically to be available if a production issue surfaced (see the HL7 interface sample for a representative example of that kind of issue). After a few days of stable live use, any remaining open items were formally handed off to the ongoing support team, and my role in that specific deployment ended.
+The onsite team, myself included, stayed through go-live specifically to be available if a production issue surfaced (see the HL7 interface sample for a representative example of that kind of issue). After a few days of stable live use, any remaining open items were formally handed off to the ongoing support team at turnover, and the team headed home — my role in that specific deployment ended at that point.
 
 ---
 

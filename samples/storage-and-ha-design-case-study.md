@@ -12,7 +12,7 @@ This sample is sanitized and generalized. It describes a standard architecture p
 
 - Each site's database, application, and communications roles ran as separate VMs on shared physical hosts, connected to a SAN over Fibre Channel.
 - Storage needed to support both a Test and a Production instance of the deployment at every site, without test activity risking or crowding production data.
-- The application tier generated case-report output files as part of normal operation. Those files needed to reach the hospital's own document/imaging system, but nothing about that workflow could be allowed to threaten database storage availability.
+- Clinical workstations generated case-report output files as part of normal operation, writing them to a share hosted on the application tier. Those files needed to reach the hospital's own document/imaging system, but nothing about that workflow could be allowed to threaten database storage availability.
 - Some sites ordered high availability; others did not. The design had to scale down cleanly to a single-node site and up to an HA site without changing the underlying pattern.
 - The communications/interface tier carried HL7 message traffic. HL7 message processing at this tier did not support automatic failover, so any HA approach for that role had to work within a manual-failover model rather than assume seamless automatic failover was available.
 
@@ -27,7 +27,7 @@ Each VM (database, application, communications, and their test counterparts) was
 The database VM carried additional dedicated LUNs beyond its own Swap/Data pair: separate DB, Log, and Backup LUNs for Test, and separate DB, Log, and Backup LUNs for Production. Test and Production database storage was physically separated at the LUN level rather than sharing a data store with logical separation only — a design choice made specifically so test workload or a test-side issue could not affect production database performance or capacity.
 
 **Isolating generated files from database storage:**
-The application tier wrote its case-report output to a file share on its own VM rather than the database VM. This kept a steadily growing set of output files from ever competing with the database for drive space. A scheduled cleanup task purged files older than 30 days from that share once the hospital's downstream system had confirmed ingestion, so the share stayed bounded in size without manual maintenance. The hospital's own document/imaging system pulled the file in on its own schedule and treated it as the system of record — the application tier's job was to make the file available and get out of the way, not to manage its lifecycle after that point.
+Clinical workstations wrote case-report output to a file share hosted on the application tier's VM rather than the database VM. This kept a steadily growing set of output files from ever competing with the database for drive space. A scheduled cleanup task purged files older than 30 days from that share once the hospital's downstream system had confirmed ingestion, so the share stayed bounded in size without manual maintenance. The hospital's own document/imaging system pulled the file in on its own schedule and treated it as the system of record — the application tier's job was to host the landing share and get out of the way, not to manage the file's lifecycle after that point.
 
 ---
 
