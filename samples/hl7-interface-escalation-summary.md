@@ -26,11 +26,11 @@ Open — treated as a priority escalation given the in-case impact, with hospita
 |---|---|
 | T+0 | Anesthesia staff report that lab results are not appearing in the anesthesia system during an active case. |
 | T+0 to T+1 | Interface engine inbound message queue and message history reviewed; confirmed LAB messages were not arriving as expected. |
-| T+1 | Application, service, and interface logs reviewed across the communications server; confirmed the lab system was still generating LAB messages. |
+| T+1 | Application, service, and interface logs reviewed across the communications server; confirmed the hospital HL7 system was still generating LAB messages. Hospital HL7 confirmed that messages were queued on their side. |
 | T+1 to T+2 | Compared the current network access control list (ACL) governing traffic to the interface engine against the known-good ACL baseline captured at go-live. |
-| T+2 | Identified that a recent ACL update, pushed by the health system's regional IT team, had stripped the specific lines permitting the lab system's traffic to the interface engine. |
+| T+2 | Identified that a recent ACL update, pushed by the health system's regional IT team, had stripped the specific lines permitting the HL7 system's traffic to the interface engine. |
 | T+2 to T+3 | Provided hospital IT the exact lines that needed to be restored; hospital IT coordinated directly with regional IT to apply the fix. |
-| T+3 | Inbound LAB message flow validated across a full day of case volume before closing the escalation. |
+| T+3 | Inbound HL7 (particularly LAB) message flow validated across a full day of case volume before closing the escalation. |
 
 ---
 
@@ -43,7 +43,7 @@ During active surgical cases, lab result (LAB) messages that normally populated 
 ## What Was Checked
 
 - Interface engine inbound message queue status and message history, filtered to LAB message traffic specifically.
-- Whether the hospital's lab system was still transmitting LAB messages at all (ruling out a lab-side outage versus a delivery problem).
+- Whether the hospital's HL7 system was still transmitting LAB messages at all (ruling out a lab-side outage versus a delivery problem).
 - Application, service, and interface logs on the communications server for connection resets or failed inbound transmissions.
 - The current network ACL governing traffic to and from the interface engine, compared line by line against the known-good ACL baseline documented at go-live.
 - Whether the ACL change correlated with a recent network policy push from the health system's regional IT team, separate from the local hospital's own IT group.
@@ -52,13 +52,13 @@ During active surgical cases, lab result (LAB) messages that normally populated 
 
 ## Findings
 
-The lab system was still generating LAB messages correctly, and the interface engine's inbound listener was configured and behaving as expected — this ruled out both a lab-side outage and an interface-side defect early. Comparing the live ACL against the pre-go-live known-good baseline showed the actual cause: a recent ACL update pushed by the regional IT team (which managed network policy across multiple facilities, not just this site) had stripped the specific lines permitting the lab system's traffic to reach the interface engine. The change was not targeted at this interface at all — it was a broader regional policy push that had an unintended side effect on this site's clinical traffic.
+The LAB system was still generating LAB messages correctly, and the interface engine's inbound listener was configured and behaving as expected — this ruled out both a lab-side outage and an interface-side defect early. Comparing the live ACL against the pre-go-live known-good baseline showed the actual cause: a recent ACL update pushed by the regional IT team (which managed network policy across multiple facilities, not just this site) had stripped the specific lines permitting the HL7 system's traffic to reach the interface engine. The change was not targeted at this interface at all — it was a broader regional policy push that had an unintended side effect on this site's HL7 traffic.
 
 ---
 
 ## Probable Root Cause
 
-A regional network ACL update removed the specific access lines required for the lab system's HL7 traffic to reach the interface engine. This was a network policy change made outside the site's own change process, not a defect in interface configuration, message handling, or local hospital IT's network management.
+A regional network ACL update removed the specific access lines required for the facility's HL7 traffic to reach the interface engine. This was a network policy change made outside the site's own change process, not a defect in interface configuration, message handling, or local hospital IT's network management.
 
 ---
 
