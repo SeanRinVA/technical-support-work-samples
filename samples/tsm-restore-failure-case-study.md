@@ -181,7 +181,3 @@ The original ticket was a restore request. The real work was understanding the b
 Vendor guidance is only useful when translated into actual configuration, validation, and runbooks.
 
 ---
-
-## Example Interview Summary
-
-A restore ticket exposed that the backup environment had a server-side media coordination problem. Five Tivoli Storage Manager servers were pulling data from source systems and talking to the IBM tape library at the same time, but they were not coordinating media access with each other. That created a condition where tape media could be overwritten. I had to learn enough Solaris, TSM server behavior, and tape library operations to trace the problem from the failed restore back to the infrastructure design. The remediation was to rebuild the TSM server configuration so the backup servers still pulled and wrote data, but a single controlling/logging server coordinated media access. After the rebuild, I validated the design with backup and restore testing and documented the architecture and restore procedure so the issue would not have to be rediscovered under pressure.
