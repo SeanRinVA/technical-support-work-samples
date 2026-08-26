@@ -13,7 +13,7 @@ All content is fictionalized or generalized. No customer data, credentials, inte
 
 ## Samples
 
-### Operations / MSP-oriented (2026)
+### Operations / MSP-oriented
 
 | File | Purpose |
 |------|---------|
